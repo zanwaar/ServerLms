@@ -16,13 +16,7 @@ import {
 import { redis } from "../utils/redis";
 import { getUserById } from "../service/userService";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser;
-    }
-  }
-}
+
 interface IRegistrationBody {
   name: string;
   email: string;

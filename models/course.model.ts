@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+import { IUser } from "./user.model";
 
 export interface IComment extends Document {
   find(arg0: (item: any) => boolean): unknown;
@@ -9,10 +10,10 @@ export interface IComment extends Document {
 }
 
 interface IReview extends Document {
-  user: object;
+  user: IUser;
   rating: number;
-  question: string;
-  questionReplies: IComment[];
+  comment: string;
+  commentReplies: IComment[];
 }
 
 interface ILink extends Document {
@@ -56,7 +57,8 @@ const reviewSchema = new Schema<IReview>({
     type: Number,
     default: 0,
   },
-  question: String,
+  comment: String,
+  commentReplies: [Object],
 });
 const linkSchema = new Schema<ILink>({
   title: String,

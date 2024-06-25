@@ -6,6 +6,8 @@ import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";
 import { IUser } from "./models/user.model";
+import orderRouter from "./routes/order.route";
+import notificationRouter from "./routes/notification.route";
 declare global {
   namespace Express {
     interface Request {
@@ -27,8 +29,7 @@ app.use(
 );
 
 // routes
-app.use("/api/v1", userRouter);
-app.use("/api/v1", courseRouter);
+app.use("/api/v1", userRouter, courseRouter, orderRouter, notificationRouter);
 
 // testing api
 app.get("/test", (reg: Request, res: Response, next: NextFunction) => {

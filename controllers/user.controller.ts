@@ -14,8 +14,11 @@ import {
   sendToken,
 } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getUserById } from "../service/userService";
-
+import {
+  getAllUserService,
+  getUserById,
+  updateUserRoleService,
+} from "../service/userService";
 
 interface IRegistrationBody {
   name: string;
@@ -386,6 +389,49 @@ export const updateProfilePicture = CatchAsyncError(
       res.status(200).json({
         success: true,
         user,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// get all user --- only admin
+export const getAllUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllUserService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+// update user role --- only for admin
+export const updateUserRole = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id, role } = req.body;
+      updateUserRoleService(res, id, role);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+// delete user  --- only for admin
+export const deleteUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const user = await userModel.findById(id);
+
+      if (!user) {
+        return next(new ErrorHandler("User Not found", 404));
+      }
+      await userModel.deleteOne({ _id: id });
+      await redis.del(id);
+      res.status(200).json({
+        success: true,
+        message: "User Deleted successfuly",
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));

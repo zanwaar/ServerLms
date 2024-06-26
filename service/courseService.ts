@@ -11,3 +11,11 @@ export const createCourse = CatchAsyncError(
     });
   }
 );
+// get all users
+export const getAllCourseService = async (res: Response) => {
+  const course = await courseModel.find().sort({ createdAt: -1 });
+  res.status(201).json({
+    success: true,
+    course,
+  });
+};

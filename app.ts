@@ -8,6 +8,7 @@ import courseRouter from "./routes/course.route";
 import { IUser } from "./models/user.model";
 import orderRouter from "./routes/order.route";
 import notificationRouter from "./routes/notification.route";
+import analyticsRouter from "./routes/analytics.router";
 declare global {
   namespace Express {
     interface Request {
@@ -29,7 +30,14 @@ app.use(
 );
 
 // routes
-app.use("/api/v1", userRouter, courseRouter, orderRouter, notificationRouter);
+app.use(
+  "/api/v1",
+  analyticsRouter,
+  userRouter,
+  courseRouter,
+  orderRouter,
+  notificationRouter
+);
 
 // testing api
 app.get("/test", (reg: Request, res: Response, next: NextFunction) => {
